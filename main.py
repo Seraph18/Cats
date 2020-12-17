@@ -16,7 +16,8 @@ def parseServerResponse(x):  # Puts actual lines instead of one straight one
     while x[currentLetterNumber] is not None:
         if firstRun == False:
             newResponse += "\n"
-        else: firstRun = True
+        else:
+            firstRun = True
 
         while currentLetterNumber < 100 and x[currentLetterNumber] is not None:
             newResponse += x[currentLetterNumber]  # Go through character by character until the line runs out
@@ -33,6 +34,8 @@ def getCatFact():
 
     return response
 
+
+# -----------------------------------------------------------------------------------------------------------------
 
 # Gui Garbage
 
