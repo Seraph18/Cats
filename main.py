@@ -45,7 +45,7 @@ layout = [[catGui.Text("Cat", size=(100, 5), key="factTextBox")], [catGui.Text("
 
 # Actually making the window now
 
-window = catGui.Window("Cat in the App", layout, size=(1000, 1000))
+window = catGui.Window("Cat in the App", layout)
 
 # event loop to keep the window open and allow the user to close it
 
