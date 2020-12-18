@@ -1,2 +1,2 @@
 # Cats
-Cat - That's all
+Cat - That is all.
