@@ -2,11 +2,16 @@
 
 
 import requests
-import PySimpleGUI as catGui
+import PySimpleGUIQt as catGui
 import webbrowser
 import os
 import random
+import pyautogui as screenMeasure
 
+# Establish Technical Variables
+width, height = screenMeasure.size()
+width = width/1.3
+height = height/1.6
 
 # Brain of the app
 
@@ -64,9 +69,14 @@ def getCatGIF():
 
     webbrowser.open(pictureUrl)
 
+# Photo Chache so the same one isn't coming up every other time but it is still random
+
+photoCache = ["", "", ""]
+photoCacheCounter = 0
 
 def chooseRandomPhoto():
     choice = random.choice(os.listdir("Photos"))
+
     print(choice)
     return choice
 
@@ -77,31 +87,38 @@ def chooseRandomPhoto():
 # Elements
 
 # Text Areas
-factTextbox_element = [catGui.Text("Cat", size=(100, 5), key="factTextBox")]
-factTestTextbox_element = [catGui.Text("Test Fact")]
+print(width)
+factTextbox_element = [catGui.Text(size=(width/12, 5), key="factTextBox")]
 # Buttons
 catFactButton_element = [catGui.Button("Cat Fact")]
 cuteCatPicButton_element = [catGui.Button("Cute Cat Pic")]
 cuteCatGifButton_element = [catGui.Button("Cute Cat GIF")]
-bestOfYJButton_element = [catGui.Button("Best of YJ")]
 creepyPastaButton_element = [catGui.Button("Random CreepyPasta")]
-# Best Of YJ element
-img_element = [catGui.Image(key="YJFrame", size=(200, 200))]
 
-# Layout of app - will rearange dynamically thanks to magic
+# Image element
+# img_element = [catGui.Button("Best of YJ"), catGui.Image(data=None, key="YJFrame")]
+
+imageButton_element = [catGui.Button("Best of YJ")]
+imageFrame_element = [catGui.Image(key="YJFrame")]
+
+# Column Setup
+
+buttonCol = [catFactButton_element,
+             cuteCatPicButton_element,
+             cuteCatGifButton_element,
+             imageButton_element,
+             creepyPastaButton_element]
+
+imgCol = [imageFrame_element]
+
+# Layout of app - Frames and stuff
 layout = [factTextbox_element,
-          factTestTextbox_element,
-          catFactButton_element,
-          cuteCatPicButton_element,
-          cuteCatGifButton_element,
-          bestOfYJButton_element,
-          creepyPastaButton_element]
-
-catGui.Column(img_element)
+          [catGui.Column(buttonCol, background_color='green'), catGui.Column(imgCol, background_color='yellow')]]
 
 # Actually making the window now
 
-window = catGui.Window("Cat in the App", layout)
+window = catGui.Window("Yael Central", layout, size=(width, height))
+
 
 # event loop to keep the window open and allow the user to close it
 
@@ -120,7 +137,7 @@ while True:
 
     if event == ("Best of YJ"):
         pic = chooseRandomPhoto()
-        window["YJFrame"].update("/home/josh/Documents/personal/Cats/Photos/" + pic)
+        window["YJFrame"].update("Photos/" + pic)
 
     if event == ("Random CreepyPasta"):  # Opens cat gif in browser
         webbrowser.open("https://www.creepypasta.com/random")
