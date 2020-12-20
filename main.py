@@ -9,26 +9,38 @@ import random
 import pyautogui as screenMeasure
 
 # Establish Technical Variables
+
+#Get Screen Resolution
 width, height = screenMeasure.size()
-width = width/1.3
-height = height/1.6
+#print(width, height)
+width = width / 1.3
+height = height / 1.6
+
 
 # Brain of the app
 
 
-def parseServerResponse(x):  # Puts actual lines instead of one straight one
+def parseServerResponse(x):  # Puts actual line breaks instead of one long one
     currentLetterNumber = 0
     firstRun = True
     newResponse = ""
-    while x[currentLetterNumber] is not None:
-        if firstRun == False:
-            newResponse += "\n"
-        else:
-            firstRun = True
-
-        while currentLetterNumber < 100 and x[currentLetterNumber] is not None:
+    while True:
+        try:
             newResponse += x[currentLetterNumber]  # Go through character by character until the line runs out
-            ++currentLetterNumber
+            currentLetterNumber += 1
+            if currentLetterNumber % 100 == 0:
+                while x[currentLetterNumber] != " ":
+                    newResponse += x[currentLetterNumber]
+                    currentLetterNumber += 1
+                newResponse += "\n"
+                currentLetterNumber += 1
+        except IndexError:
+            if x[currentLetterNumber - 1] != ".": #Adds period if one is missing, which sometimes they are
+                newResponse += "."
+                print("Added Period")
+            print(newResponse)
+            return newResponse
+
 
 
 # Gets the fact about the cat
@@ -38,7 +50,7 @@ def getCatFact():
 
     # Sets the response variable to what I actually wanted to get: Spent 15 minutes looking for why it was printing the wrong crap
     response = (response.json()['fact'])
-
+    response = parseServerResponse(response)
     return response
 
 
@@ -69,26 +81,43 @@ def getCatGIF():
 
     webbrowser.open(pictureUrl)
 
-# Photo Chache so the same one isn't coming up every other time but it is still random
 
-photoCache = ["", "", ""]
-photoCacheCounter = 0
-
+# Chooses random photo from generated photoList
+# No longer needed it but keeping it cause ya never know
+"""
 def chooseRandomPhoto():
     choice = random.choice(os.listdir("Photos"))
-
     print(choice)
-    return choice
-
+    return choice   
+"""
 
 # -----------------------------------------------------------------------------------------------------------------
 
+
 # Gui Garbage
+
+# Theme
+
+# Custom Theme
+YaelTheme = {'BACKGROUND': '#F99FC9',
+             'TEXT': 'black',
+             'INPUT': '#DDE0DE',
+             'SCROLL': '#E3E3E3',
+             'TEXT_INPUT': 'black',
+             'BUTTON': ('black', '#85c7e3'),
+             'PROGRESS': 'blue',
+             'BORDER': 1,
+             'SLIDER_DEPTH': 0,
+             'PROGRESS_DEPTH': 0}
+
+catGui.LOOK_AND_FEEL_TABLE['YaelTheme'] = YaelTheme
+catGui.theme('YaelTheme')
+
 # Elements
 
 # Text Areas
-print(width)
-factTextbox_element = [catGui.Text(size=(width/12, 5), key="factTextBox")]
+# print(width)
+factTextbox_element = [catGui.Text(size_px=(width, height/6), key="factTextBox", font=("Helvetica, 15"))]
 # Buttons
 catFactButton_element = [catGui.Button("Cat Fact")]
 cuteCatPicButton_element = [catGui.Button("Cute Cat Pic")]
@@ -113,12 +142,19 @@ imgCol = [imageFrame_element]
 
 # Layout of app - Frames and stuff
 layout = [factTextbox_element,
-          [catGui.Column(buttonCol, background_color='green'), catGui.Column(imgCol, background_color='yellow')]]
+          [catGui.Column(buttonCol), catGui.Column(imgCol)]]
 
 # Actually making the window now
 
 window = catGui.Window("Yael Central", layout, size=(width, height))
 
+# Initilizations
+# Theme
+print(catGui.theme_list())
+# Makes a Array of all the photo names and randomizes it
+photoList = os.listdir("Photos")
+random.shuffle(photoList)
+photoCounter = 0  # Keeps track of where the user is in the photo array
 
 # event loop to keep the window open and allow the user to close it
 
@@ -136,8 +172,17 @@ while True:
         getCatGIF()
 
     if event == ("Best of YJ"):
-        pic = chooseRandomPhoto()
-        window["YJFrame"].update("Photos/" + pic)
+        print(photoList, photoCounter)  # Test Prints
+        try:
+            pic = photoList[photoCounter]
+            window["YJFrame"].update("Photos/" + pic)
+            photoCounter += 1  # moves the counter to the next picture
+        except IndexError:  # Catches the array when it ends and reshuffles and resets the counter
+            random.shuffle(photoList)
+            photoCounter = 0
+            pic = photoList[photoCounter]
+            window["YJFrame"].update("Photos/" + pic)
+            photoCounter += 1  # moves the counter to the next picture
 
     if event == ("Random CreepyPasta"):  # Opens cat gif in browser
         webbrowser.open("https://www.creepypasta.com/random")

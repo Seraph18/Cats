@@ -1,25 +1,37 @@
-import PySimpleGUI as sg
+import PySimpleGUIQt as sg
 
-# Demo of how columns work
-# GUI has on row 1 a vertical slider followed by a COLUMN with 7 rows
-# Prior to the Column element, this layout was not possible
-# Columns layouts look identical to GUI layouts, they are a list of lists of elements.
+"""
+    Allows you to "browse" through the Theme settings.  Click on one and you'll see a
+    Popup window using the color scheme you chose.  It's a simple little program that also demonstrates
+    how snappy a GUI can feel if you enable an element's events rather than waiting on a button click.
+    In thYaelTheme = {'BACKGROUND': '#F99FC9',
+               'TEXT': 'black',
+               'INPUT': '#DDE0DE',
+               'SCROLL': '#E3E3E3',
+               'TEXT_INPUT': 'black',
+               'BUTTON': ('white', '#85c7e3'),
+               'PROGRESS': 'blue',
+               'BORDER': 1,
+               'SLIDER_DEPTH': 0,
+               'PROGRESS_DEPTH': 0}
 
-sg.ChangeLookAndFeel('BlueMono')
+sg.LOOK_AND_FEEL_TABLE['YaelTheme'] = YaelTheme
+sg.theme('YaelTheme')is program, as soon as a listbox entry is clicked, the read returns.
+"""
 
-# Column layout
-col = [[sg.Text('col Row 1', text_color='white', background_color='blue')],
-       [sg.Text('col Row 2', text_color='white', background_color='blue'), sg.Input('col input 1')],
-       [sg.Text('col Row 3', text_color='white', background_color='blue'), sg.Input('col input 2')]]
 
-layout = [[sg.Listbox(values=('Listbox Item 1', 'Listbox Item 2', 'Listbox Item 3'),
-                      select_mode=sg.LISTBOX_SELECT_MODE_MULTIPLE, size=(20, 3)),
-           sg.Column(col, background_color='blue')],
-          [sg.Input('Last input')],
-          [sg.OK()]]
+layout = [[sg.Text('Theme Browser')],
+          [sg.Text('Click a Theme color to see demo window')],
+          [sg.Listbox(values=sg.theme_list(), size=(20, 12), key='-LIST-', enable_events=True)],
+          [sg.Button('Exit')]]
 
-# Display the Window and get values
+window = sg.Window('Theme Browser', layout)
 
-event, values = sg.Window('Compact 1-line Window with column', layout).Read()
+while True:  # Event Loop
+    event, values = window.read()
+    if event in (sg.WIN_CLOSED, 'Exit'):
+        break
+    sg.theme(values['-LIST-'][0])
+    sg.popup_get_text('This is {}'.format(values['-LIST-'][0]))
 
-sg.popup(event, values, line_width=200)
+window.close()
