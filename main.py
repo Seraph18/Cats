@@ -117,17 +117,17 @@ catGui.theme('YaelTheme')
 
 # Text Areas
 # print(width)
-factTextbox_element = [catGui.Text(size_px=(width, height/6), key="factTextBox", font=("Helvetica, 15"))]
+factTextbox_element = [catGui.Text(size_px=(width, height/6), key="factTextBox", font=("Helvetica, 15"), justification='c')]
 # Buttons
-catFactButton_element = [catGui.Button("Cat Fact")]
-cuteCatPicButton_element = [catGui.Button("Cute Cat Pic")]
-cuteCatGifButton_element = [catGui.Button("Cute Cat GIF")]
-creepyPastaButton_element = [catGui.Button("Random CreepyPasta")]
+catFactButton_element = [catGui.Button("Cat Fact", size=(20, 2))]
+cuteCatPicButton_element = [catGui.Button("Cute Cat Pic", size=(20, 2))]
+cuteCatGifButton_element = [catGui.Button("Cute Cat GIF", size=(20, 2))]
+creepyPastaButton_element = [catGui.Button("Random CreepyPasta", size=(20, 2))]
 
 # Image element
 # img_element = [catGui.Button("Best of YJ"), catGui.Image(data=None, key="YJFrame")]
 
-imageButton_element = [catGui.Button("Best of YJ")]
+imageButton_element = [catGui.Button("Best of YJ", size=(20, 2))]
 imageFrame_element = [catGui.Image(key="YJFrame")]
 
 # Column Setup
@@ -141,7 +141,7 @@ buttonCol = [catFactButton_element,
 imgCol = [imageFrame_element]
 
 # Layout of app - Frames and stuff
-layout = [factTextbox_element,
+layout = [[catGui.Frame(title='Cat Facts', layout=[factTextbox_element], visible=True, element_justification='c', relief='RELIEF_FLAT')],
           [catGui.Column(buttonCol), catGui.Column(imgCol)]]
 
 # Actually making the window now
