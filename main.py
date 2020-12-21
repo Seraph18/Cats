@@ -150,7 +150,7 @@ layout = [[catGui.Frame(title='Cat Facts', layout=[factTextbox_element], visible
 
 window = catGui.Window("Yael Central", layout, size=(width, height))
 
-# Initilizations
+# Initializations
 # Theme
 print(catGui.theme_list())
 # Makes a Array of all the photo names and randomizes it
@@ -181,13 +181,13 @@ while True:
         print(photoList, photoCounter)  # Test Prints
         try:
             pic = photoList[photoCounter]
-            window["YJFrame"].update("Photos/" + pic)
+            window["YJFrame"].update(currentDir + "/Photos/" + pic)
             photoCounter += 1  # moves the counter to the next picture
         except IndexError:  # Catches the array when it ends and reshuffles and resets the counter
             random.shuffle(photoList)
             photoCounter = 0
             pic = photoList[photoCounter]
-            window["YJFrame"].update("Photos/" + pic)
+            window["YJFrame"].update(currentDir + "/Photos/" + pic)
             photoCounter += 1  # moves the counter to the next picture
 
     if event == ("Random CreepyPasta"):  # Opens cat gif in browser
