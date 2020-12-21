@@ -5,14 +5,15 @@ import requests
 import PySimpleGUIQt as catGui
 import webbrowser
 import os
+import pathlib
 import random
 import pyautogui as screenMeasure
 
 # Establish Technical Variables
 
-#Get Screen Resolution
+# Get Screen Resolution
 width, height = screenMeasure.size()
-#print(width, height)
+# print(width, height)
 width = width / 1.3
 height = height / 1.6
 
@@ -35,12 +36,11 @@ def parseServerResponse(x):  # Puts actual line breaks instead of one long one
                 newResponse += "\n"
                 currentLetterNumber += 1
         except IndexError:
-            if x[currentLetterNumber - 1] != ".": #Adds period if one is missing, which sometimes they are
+            if x[currentLetterNumber - 1] != ".":  # Adds period if one is missing, which sometimes they are
                 newResponse += "."
                 print("Added Period")
             print(newResponse)
             return newResponse
-
 
 
 # Gets the fact about the cat
@@ -117,7 +117,8 @@ catGui.theme('YaelTheme')
 
 # Text Areas
 # print(width)
-factTextbox_element = [catGui.Text(size_px=(width, height/6), key="factTextBox", font=("Helvetica, 15"), justification='c')]
+factTextbox_element = [
+    catGui.Text(size_px=(width, height / 6), key="factTextBox", font=("Helvetica, 15"), justification='c')]
 # Buttons
 catFactButton_element = [catGui.Button("Cat Fact", size=(20, 2))]
 cuteCatPicButton_element = [catGui.Button("Cute Cat Pic", size=(20, 2))]
@@ -141,7 +142,8 @@ buttonCol = [catFactButton_element,
 imgCol = [imageFrame_element]
 
 # Layout of app - Frames and stuff
-layout = [[catGui.Frame(title='Cat Facts', layout=[factTextbox_element], visible=True, element_justification='c', relief='RELIEF_FLAT')],
+layout = [[catGui.Frame(title='Cat Facts', layout=[factTextbox_element], visible=True, element_justification='c',
+                        relief='RELIEF_FLAT')],
           [catGui.Column(buttonCol), catGui.Column(imgCol)]]
 
 # Actually making the window now
@@ -152,7 +154,11 @@ window = catGui.Window("Yael Central", layout, size=(width, height))
 # Theme
 print(catGui.theme_list())
 # Makes a Array of all the photo names and randomizes it
-photoList = os.listdir("Photos")
+
+# Current Directory
+currentDir = str(pathlib.Path(__file__).resolve().parent)
+print(currentDir)
+photoList = os.listdir(currentDir + "/Photos")
 random.shuffle(photoList)
 photoCounter = 0  # Keeps track of where the user is in the photo array
 
