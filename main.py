@@ -38,15 +38,15 @@ def parseServerResponse(x):  # Puts actual line breaks instead of one long one
         except IndexError:
             if x[currentLetterNumber - 1] != ".":  # Adds period if one is missing, which sometimes they are
                 newResponse += "."
-                print("Added Period")
-            print(newResponse)
+                #print("Added Period")
+            #print(newResponse)
             return newResponse
 
 
 # Gets the fact about the cat
 def getCatFact():
     response = requests.get("https://catfact.ninja/fact")
-    print(response)
+    #print(response)
 
     # Sets the response variable to what I actually wanted to get: Spent 15 minutes looking for why it was printing the wrong crap
     response = (response.json()['fact'])
@@ -99,7 +99,7 @@ def chooseRandomPhoto():
 # Theme
 
 # Custom Theme
-YaelTheme = {'BACKGROUND': '#F99FC9',
+MainTheme = {'BACKGROUND': '#F99FC9',
              'TEXT': 'black',
              'INPUT': '#DDE0DE',
              'SCROLL': '#E3E3E3',
@@ -110,8 +110,8 @@ YaelTheme = {'BACKGROUND': '#F99FC9',
              'SLIDER_DEPTH': 0,
              'PROGRESS_DEPTH': 0}
 
-catGui.LOOK_AND_FEEL_TABLE['YaelTheme'] = YaelTheme
-catGui.theme('YaelTheme')
+catGui.LOOK_AND_FEEL_TABLE['MainTheme'] = MainTheme
+catGui.theme('MainTheme')
 
 # Elements
 
@@ -128,8 +128,8 @@ creepyPastaButton_element = [catGui.Button("Random CreepyPasta", size=(20, 2))]
 # Image element
 # img_element = [catGui.Button("Best of YJ"), catGui.Image(data=None, key="YJFrame")]
 
-imageButton_element = [catGui.Button("Best of YJ", size=(20, 2))]
-imageFrame_element = [catGui.Image(key="YJFrame")]
+imageButton_element = [catGui.Button("Best of Birb", size=(20, 2))]
+imageFrame_element = [catGui.Image(key="BirbFrame")]
 
 # Column Setup
 
@@ -148,16 +148,16 @@ layout = [[catGui.Frame(title='Cat Facts', layout=[factTextbox_element], visible
 
 # Actually making the window now
 
-window = catGui.Window("Yael Central", layout, size=(width, height))
+window = catGui.Window("Party Central", layout, size=(width, height))
 
 # Initializations
 # Theme
-print(catGui.theme_list())
+#print(catGui.theme_list())
 # Makes a Array of all the photo names and randomizes it
 
 # Current Directory
 currentDir = str(pathlib.Path(__file__).resolve().parent)
-print(currentDir)
+#print(currentDir)
 photoList = os.listdir(currentDir + "/Photos")
 random.shuffle(photoList)
 photoCounter = 0  # Keeps track of where the user is in the photo array
@@ -177,17 +177,17 @@ while True:
     if event == ("Cute Cat GIF"):  # Opens cat gif in browser
         getCatGIF()
 
-    if event == ("Best of YJ"):
-        print(photoList, photoCounter)  # Test Prints
+    if event == ("Best of Birb"):
+        #print(photoList, photoCounter)  # Test Prints
         try:
             pic = photoList[photoCounter]
-            window["YJFrame"].update(currentDir + "/Photos/" + pic)
+            window["BirbFrame"].update(currentDir + "/Photos/" + pic)
             photoCounter += 1  # moves the counter to the next picture
         except IndexError:  # Catches the array when it ends and reshuffles and resets the counter
             random.shuffle(photoList)
             photoCounter = 0
             pic = photoList[photoCounter]
-            window["YJFrame"].update(currentDir + "/Photos/" + pic)
+            window["BirbFrame"].update(currentDir + "/Photos/" + pic)
             photoCounter += 1  # moves the counter to the next picture
 
     if event == ("Random CreepyPasta"):  # Opens cat gif in browser
